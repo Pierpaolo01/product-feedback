@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts",
     "dev:api": "nodemon src/server.ts",
     "dev:client": "vite",
     "build": "vite build",
@@ -22,19 +22,40 @@
   "homepage": "https://github.com/Pierpaolo01/product-feedback#readme",
   "dependencies": {
     "@prisma/client": "^4.6.1",
-    "cors": "^2.8.5",
+    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "vue": "^3.2.41"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.12",
+    "@types/bcrypt": "^5.0.0",
+    "@types/chai": "^4.3.4",
+    "@types/expect": "^24.3.0",
     "@types/express": "^4.17.14",
+    "@types/express-validator": "^3.0.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
+    "@types/sinon": "^10.0.13",
     "@vitejs/plugin-vue": "^3.2.0",
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
     "nodemon": "^2.0.20",
     "prisma": "^4.6.1",
+    "sinon": "^14.0.2",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "^4.9.3",
     "vite": "^3.2.3"
+  },
+  "_moduleAliases": {
+    "@src": "src",
+    "@type": "src/types/",
+    "@controllers": "src/controllers",
+    "@routes": "src/routes",
+    "@middlewares": "dist/src/middleware"
   }
 }
