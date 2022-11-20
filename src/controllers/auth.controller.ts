@@ -21,7 +21,7 @@ export const validate = (method: Validators) => {
                     .notEmpty().withMessage('Username is required')
                     .isAlphanumeric().withMessage('Username can only include letters and numbers')
                     .custom(async (value: string) => {
-                        const usernameCheck =  prisma.user.findFirst({
+                        const usernameCheck =  await prisma.user.findFirst({
                             where: {
                                 username: value,
                             },
@@ -33,37 +33,76 @@ export const validate = (method: Validators) => {
             ]
         }
         case Validators.login: {
-            return []
+            return [
+                body("username", "invalid username")
+                    .exists()
+                    .custom(async (username: string, {req}) => {
+                        const user = await prisma.user.findFirst({
+                            where: {
+                                username
+                            }
+                        })
+                        if (user === null) {
+                            return Promise.reject()
+                        }
+                        req.user = user
+                    }),
+                body('password', "invalid password")
+                    .exists()
+                    .custom(async (password, {req}) => {
+                        if (!await bcrypt.compare(password, req.user.password)) {
+                            return Promise.reject()
+                        }
+                    })
+            ]
         }
     }
 }
 
-export const signUp =  async (req: Request, res: Response) => {
-    const {errors} = validationResult(req)
 
-    if (errors) {
-        return res.status(422).send({data: errors})
+
+export const signUp = async (req: Request, res: Response) => {
+        const { errors } = validationResult(req)
+
+        if (errors.length) {
+            return res.status(422).send({data: errors})
+        }
+
+        const { username, password }: { username: string, password: string } = req.body
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = await prisma.user.create({
+            data: {
+                username,
+                password: hashedPassword,
+                role: Role.USER
+            }
+        })
+
+        const jwtPayload: JwtToken = {
+            userId: newUser.id,
+            username: newUser.username,
+            role: newUser.role
+        }
+
+        const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '15m'})
+        res.status(201).json({data: jwtToken})
+        return
     }
 
-    const {username, password}: {username: string, password: string} = req.body
+export const login = async (req: Request, res: Response) => {
+    const { errors } = validationResult(req)
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = await prisma.user.create({
-        data: {
-            username,
-            password: hashedPassword,
-            role: Role.USER
-        }
-    })
+    if (errors.length) {
+        return res.status(422).json({data: errors})
+    }
 
-    const jwtPayload: JwtToken = {
-        userId: newUser.id,
-        username: newUser.username,
-        role: newUser.role
+    const jwtPayload: any = {
+        userId: req.user.id,
+        username: req.user.username,
+        role: req.user.role
     }
 
     const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '15m'})
-    res.status(201).send({data: jwtToken})
+    return res.status(201).json({data: jwtToken})
 }
-
-
