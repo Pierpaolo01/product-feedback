@@ -1,5 +1,5 @@
 // to make the file a module and avoid the TypeScript error
-import {prisma} from "@src/prisma";
+import { User } from "@type/models/user.ts";
 
 export {}
 declare global {
@@ -12,10 +12,3 @@ declare global {
     }
 }
 
-interface User {
-    username: string;
-    password: string;
-    roles: string;
-    created_at: string;
-    updated_at: string;
-}

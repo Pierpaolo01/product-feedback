@@ -11,7 +11,7 @@ export const isAuth = async (req: Request, res: Response, next: NextFunction) =>
         decodedToken = jwt.verify(jwtToken, 'super-secret') as JwtToken;
     } catch (e) {
         res.status(401).json({data: 'invalid token'});
-        return;
+        return
     }
 
     req.userId = decodedToken.userId;

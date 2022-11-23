@@ -15,22 +15,38 @@ enum Role {
   ADMIN
 }
 
+enum SuggestionStatus {
+  PLANNED
+  INPROGRESS
+  LIVE
+}
+
+enum Category {
+  UI
+  UX
+  ENHANCEMENT
+  BUG
+  FEATURE
+}
+
 model User {
   id            Int     @id     @default(autoincrement())
   username      String
   password      String
   role          Role
-  suggestions   Feedback[]
+  suggestions   Suggestion[]
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }
 
-model Feedback {
-  id            Int     @id @default(autoincrement())
-  title         String
-  category      String
-  created_by    User    @relation(fields: [userId], references: [id])
-  userId        Int
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+model Suggestion {
+  id                    Int     @id @default(autoincrement())
+  title                 String
+  description           String
+  category              Category
+  status                SuggestionStatus
+  user                  User    @relation(fields: [user_id], references: [id])
+  user_id               Int
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
 }
