@@ -1,6 +1,6 @@
 import express from "express"
 import "module-alias/register"
-import {authRoutes} from "@routes/auth.routes";
+import {routes} from "@src/routes";
 
 const app = express()
 
@@ -12,7 +12,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/api', authRoutes)
+app.use(routes)
 
 app.listen(8080, () => {
     console.log("listening on port 8080")

@@ -1,5 +1,4 @@
 import { body } from "express-validator"
-const {validationResult } = require('express-validator')
 import {Request, Response} from "express"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
@@ -50,7 +49,7 @@ export const validate = (method: Validators) => {
                 body('password', "invalid password")
                     .exists()
                     .custom(async (password, {req}) => {
-                        if (!await bcrypt.compare(password, req.user.password)) {
+                        if (!await bcrypt.compare(password, req.user?.password ?? "")) {
                             return Promise.reject()
                         }
                     })
@@ -62,13 +61,7 @@ export const validate = (method: Validators) => {
 
 
 export const signUp = async (req: Request, res: Response) => {
-        const { errors } = validationResult(req)
-
-        if (errors.length) {
-            return res.status(422).send({data: errors})
-        }
-
-        const { username, password }: { username: string, password: string } = req.body
+    const { username, password }: { username: string, password: string } = req.body
 
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = await prisma.user.create({
@@ -91,18 +84,12 @@ export const signUp = async (req: Request, res: Response) => {
     }
 
 export const login = async (req: Request, res: Response) => {
-    const { errors } = validationResult(req)
-
-    if (errors.length) {
-        return res.status(422).json({data: errors})
-    }
-
     const jwtPayload: any = {
-        userId: req.user.id,
-        username: req.user.username,
-        role: req.user.role
+        userId: req.user!.id,
+        username: req.user!.username,
+        role: req.user!.role
     }
 
     const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '15m'})
-    return res.status(201).json({data: jwtToken})
+    return res.status(200).json({data: jwtToken})
 }
