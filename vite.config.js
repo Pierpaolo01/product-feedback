@@ -17,6 +17,11 @@ export default defineConfig({
           'src',
           'client',
       ),
+      '@constants': path.resolve(
+          __dirname,
+          'src',
+          'constants',
+      ),
     },
   },
 });

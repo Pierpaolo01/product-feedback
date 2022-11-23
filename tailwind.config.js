@@ -8,7 +8,9 @@ module.exports = {
     extend: {
       colors: {
         "app-bg": '#F7F8FD',
-        "app-bg-darker": '#F2F4FF'
+        "app-bg-darker": '#F2F4FF',
+        "purple": '#AD1FEA',
+        "dark-purple": '#373F68',
       }
     },
   },

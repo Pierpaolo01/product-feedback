@@ -1,9 +1,20 @@
 <script setup lang="ts">
-
+import TheHeaderComponent from "@client/components/TheHeaderComponent.vue";
 </script>
 
 <template>
-<div>
+  <div class="flex flex-col">
+    <TheHeaderComponent />
+  </div>
+  <div class="hidden md:flex flex-col">
+    <aside>
 
-</div>
+    </aside>
+    <header>
+
+    </header>
+    <main>
+
+    </main>
+  </div>
 </template>
