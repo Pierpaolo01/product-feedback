@@ -28,19 +28,32 @@ const state = reactive<{
     </div>
     <aside
         v-if="state.toggleNav"
-        class="p-6 bg-white fixed top-16 right-0 h-full"
+        class="bg-black/20 fixed top-16 flex justify-end right-0 h-full w-full"
     >
-      <div class="w-[250px]">dsfs</div>
-      dfs
+      <nav
+          v-click-away="() => state.toggleNav = false"
+          class="w-fit p-6 bg-app-bg space-y-6"
+      >
+        <slot name="navItems"/>
+      </nav>
     </aside>
   </div>
-  <div class="hidden md:flex flex-col">
-    <aside>
+  <div class="hidden md:flex flex-col p-8 max-w-7xl mx-auto">
+    <div class="flex flex-col w-full space-y-8 lg:space-x-8 lg:flex-row">
+      <aside class="space-x-6 lg:space-y-6 flex flex-row lg:flex-col justify-between">
+        <div class="w-[225px] h-[225px] rounded-lg bg-white lg:w-[250px] p-5 gradient">
+          <h1 class="text-center text-2xl text-white font-bold">
+            product feedback
+          </h1>
+        </div>
+        <slot name="navItems"/>
+      </aside>
+      <header class="flex-1">
+        <TheHeaderComponent />
+      </header>
+    </div>
 
-    </aside>
-    <header>
 
-    </header>
     <main>
 
     </main>
