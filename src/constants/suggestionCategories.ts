@@ -1,8 +1,8 @@
 export enum SuggestionCategories {
-    ALL = 'all',
-    UI = 'ui',
-    UX = 'ux',
-    ENHANCEMENT = 'enhancement',
-    BUG = 'bug',
-    FEATURE = 'feature'
+    ALL = 'All',
+    UI = 'UI',
+    UX = 'UX',
+    ENHANCEMENT = 'Enhancement',
+    BUG = 'Bug',
+    FEATURE = 'Feature'
 }

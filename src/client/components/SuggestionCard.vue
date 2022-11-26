@@ -18,13 +18,13 @@ import comment from "@client/assets/icons/comment.svg";
             <svg class="stroke-purple-2" width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 6L5 2L9 6" stroke-width="2"/>
             </svg>
-            <span class="text-[#3A4374] font-bold">2</span>
+            <span class="text-dark-purple-gray font-bold">2</span>
           </BadgeComponent>
       </div>
       <div class="col-span-1 mt-4 flex justify-self-end md:mt-0">
         <span class="inline-flex items-center px-2.5 py-1.5 space-x-1">
           <img :src="comment" alt="comment_icon">
-          <span class="text-gray-700 font-bold text-sm text-[#3A4374]">69</span>
+          <span class="text-gray-700 font-bold text-sm text-dark-purple-gray">69</span>
         </span>
       </div>
     </div>

@@ -47,6 +47,11 @@ const state = reactive<{
         </ul>
       </div>
     </div>
-    <button class="button button-primary">+ Add Feedback</button>
+    <router-link
+        :to="{name: 'create-suggestion'}"
+        class="button button-primary"
+    >
+      + Add Feedback
+    </router-link>
   </div>
 </template>

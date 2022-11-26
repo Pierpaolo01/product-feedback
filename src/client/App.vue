@@ -1,27 +1,10 @@
 <script setup lang="ts">
-import DashboardLayout from "@client/layouts/DashboardLayout.vue";
-import TheCategoryCard from "@client/components/TheCategoryCard.vue";
-import TheRoadmapCard from "@client/components/TheRoadmapCard.vue";
-import TheHeaderComponent from "@client/components/TheHeaderComponent.vue";
-import SuggestionCard from "@client/components/SuggestionCard.vue";
+
 </script>
 
 <template>
   <div>
-    <DashboardLayout>
-      <template #header>
-        <TheHeaderComponent />
-      </template>
-      <template #navItems>
-        <TheCategoryCard />
-        <TheRoadmapCard />
-      </template>
-      <template #content>
-        <SuggestionCard />
-        <SuggestionCard />
-        <SuggestionCard />
-      </template>
-    </DashboardLayout>
+    <router-view />
   </div>
 </template>
 
@@ -35,15 +18,15 @@ import SuggestionCard from "@client/components/SuggestionCard.vue";
 }
 
 .button-primary {
-  @apply bg-purple-2 hover:bg-[#7C91F9];
+  @apply bg-purple-2 hover:bg-[#7C91F9] text-white;
 }
 
 .button-secondary {
-  @apply bg-[#7C91F9] hover:bg-[#C75AF6];
+  @apply bg-[#7C91F9] hover:bg-[#C75AF6] text-white;
 }
 
 .button-tertiary {
-  @apply bg-[#3A4374] hover:bg-[#656EA3];
+  @apply bg-dark-purple-gray hover:bg-[#656EA3] text-white;
 }
 
 .button-deletion {
@@ -51,7 +34,7 @@ import SuggestionCard from "@client/components/SuggestionCard.vue";
 }
 
 .button-back {
-  @apply hover:underline bg-[#373F68];
+  @apply hover:underline text-[#373F68];
 }
 
 </style>
