@@ -12,10 +12,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(
+      '@client': path.resolve(
           __dirname,
           'src',
           'client',
+      ),
+      '@constants': path.resolve(
+          __dirname,
+          'src',
+          'constants',
       ),
     },
   },
