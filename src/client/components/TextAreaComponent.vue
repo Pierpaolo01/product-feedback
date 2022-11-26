@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
   modelValue: string;
-  rows: number;
+  rows?: number;
 }>(), {
   rows: 3
 })

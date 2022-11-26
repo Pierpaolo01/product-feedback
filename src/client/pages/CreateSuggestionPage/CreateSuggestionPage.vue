@@ -30,6 +30,7 @@ const createSuggestion = async () => {
     await FeedbackService.createSuggestion(state.form);
     await router.push({name: 'dashboard'});
   } catch (e: any) {
+      console.log(e)
     if (e.response.status === 422) {
       state.validationError = e.response.data.data;
     }

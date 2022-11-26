@@ -14,6 +14,11 @@ const routes = createRouter({
             component: () => import('@client/pages/CreateSuggestionPage/CreateSuggestionPage.vue')
         },
         {
+            path: "/authentication",
+            name: "authentication",
+            component: () => import('@client/pages/AuthenticationPage/AuthenticationPage.vue')
+        },
+        {
             path: '/',
             redirect: {name: "dashboard" }
         }
