@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  text: string
+  text?: string
   isSelected?: boolean;
 }>()
 </script>
@@ -11,6 +11,7 @@ defineProps<{
       :class="isSelected ? 'bg-purple text-white' : 'bg-app-bg-darker text-purple hover:bg-[#CFD7FF]'"
   >
     {{text}}
+    <slot></slot>
   </div>
 </template>
 

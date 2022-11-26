@@ -47,6 +47,6 @@ const state = reactive<{
         </ul>
       </div>
     </div>
-    <button>+ Add Feedback</button>
+    <button class="button button-primary">+ Add Feedback</button>
   </div>
 </template>

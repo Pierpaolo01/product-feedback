@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import TheHeaderComponent from "@client/components/TheHeaderComponent.vue";
 import hamburgerMenu from "@client/assets/icons/hamburger-menu.svg"
 import cross from "@client/assets/icons/cross.svg"
 import {reactive} from "vue";
@@ -21,10 +20,14 @@ const state = reactive<{
         <img
             :src="!state.toggleNav ? hamburgerMenu : cross"
             alt="hamburger_menu"
+            class="cursor-pointer"
             @click="state.toggleNav = !state.toggleNav"
         >
       </div>
-      <TheHeaderComponent />
+      <slot name="header" />
+      <main class="p-6 space-y-4">
+        <slot name="content" />
+      </main>
     </div>
     <aside
         v-if="state.toggleNav"
@@ -39,8 +42,8 @@ const state = reactive<{
     </aside>
   </div>
   <div class="hidden md:flex flex-col p-8 max-w-7xl mx-auto">
-    <div class="flex flex-col w-full space-y-8 lg:space-x-8 lg:flex-row">
-      <aside class="space-x-6 lg:space-y-6 flex flex-row lg:flex-col justify-between">
+    <div class="flex flex-col w-full space-y-8 lg:space-x-8 lg:space-y-0 lg:flex-row">
+      <aside class="space-x-6 lg:space-x-0 lg:space-y-6 flex flex-row lg:flex-col justify-between">
         <div class="w-[225px] h-[225px] rounded-lg bg-white lg:w-[250px] p-5 gradient">
           <h1 class="text-center text-2xl text-white font-bold">
             product feedback
@@ -48,15 +51,11 @@ const state = reactive<{
         </div>
         <slot name="navItems"/>
       </aside>
-      <header class="flex-1">
-        <TheHeaderComponent />
-      </header>
+      <main class="space-y-6 flex-1">
+        <slot name="header" />
+        <slot name="content" />
+      </main>
     </div>
-
-
-    <main>
-
-    </main>
   </div>
 </template>
 
