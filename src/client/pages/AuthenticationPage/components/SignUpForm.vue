@@ -4,10 +4,11 @@ import type {SignupForm} from "@client/types/authenticationTypes";
 import WrapperInput from "@client/components/WrapperInput.vue";
 import InputComponent from "@client/components/InputComponent.vue";
 import AuthenticationService from "@client/services/AuthenticationService";
+import {ValidationError} from "@client/types/validationError";
 
 const state = reactive<{
   form: SignupForm;
-  validationError: any;
+  validationError?: ValidationError;
 }>({
   form: {
     first_name: '',
@@ -15,7 +16,7 @@ const state = reactive<{
     username: '',
     password: ''
   },
-  validationError: null
+  validationError: undefined
 });
 
 const emits = defineEmits(['login'])
@@ -29,7 +30,6 @@ const signup = async () => {
     }
   }
 }
-
 </script>
 
 <template>
@@ -42,16 +42,32 @@ const signup = async () => {
           @submit.prevent="signup"
       >
         <WrapperInput title="First name">
-          <InputComponent v-model="state.form.first_name" />
+          <InputComponent
+              v-model="state.form.first_name"
+              name="first_name"
+              :validation-error="state.validationError"
+          />
         </WrapperInput>
         <WrapperInput title="Last name">
-          <InputComponent v-model="state.form.last_name" />
+          <InputComponent
+              v-model="state.form.last_name"
+              name="last_name"
+              :validation-error="state.validationError"
+          />
         </WrapperInput>
         <WrapperInput title="Username">
-          <InputComponent v-model="state.form.username" />
+          <InputComponent
+              v-model="state.form.username"
+              name="username"
+              :validation-error="state.validationError"
+          />
         </WrapperInput>
         <WrapperInput title="Password">
-          <InputComponent v-model="state.form.password" />
+          <InputComponent
+              v-model="state.form.password"
+              name="password"
+              :validation-error="state.validationError"
+          />
         </WrapperInput>
         <div class="w-full flex justify-end items-center space-x-4">
           <button

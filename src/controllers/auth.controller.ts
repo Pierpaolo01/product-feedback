@@ -16,19 +16,30 @@ export const validate = (method: Validators) => {
     switch (method) {
         case Validators.signup: {
             return [
+                body('first_name')
+                    .notEmpty().withMessage('First name is required'),
+                body('last_name')
+                    .notEmpty().withMessage('Last name is required'),
                 body('username')
                     .notEmpty().withMessage('Username is required')
                     .isAlphanumeric().withMessage('Username can only include letters and numbers')
                     .custom(async (value: string) => {
-                        const usernameCheck =  await prisma.user.findFirst({
-                            where: {
-                                username: value,
-                            },
-                        })
-                        if (usernameCheck !== null) {
+                            const usernameCheck = await prisma.user.findFirst({
+                                where: {
+                                    username: value,
+                                },
+                            })
+                            if (usernameCheck !== null) {
+                                return Promise.reject()
+                            }
+                    }).withMessage("Username already taken"),
+                body('password')
+                    .custom((value) => {
+                        if (value.split('').length <= 5) {
                             return Promise.reject()
                         }
-                    }).withMessage("Username already taken")
+                        return Promise.resolve()
+                    }).withMessage('Password must be longer then 5 characters')
             ]
         }
         case Validators.login: {
@@ -61,11 +72,13 @@ export const validate = (method: Validators) => {
 
 
 export const signUp = async (req: Request, res: Response) => {
-    const { username, password }: { username: string, password: string } = req.body
+    const { first_name, last_name, username, password }: { [key:string]: string } = req.body
 
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = await prisma.user.create({
             data: {
+                first_name,
+                last_name,
                 username,
                 password: hashedPassword,
                 role: Role.USER

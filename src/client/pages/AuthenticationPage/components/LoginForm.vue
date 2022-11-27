@@ -4,16 +4,17 @@ import type {LoginForm} from "@client/types/authenticationTypes";
 import WrapperInput from "@client/components/WrapperInput.vue";
 import InputComponent from "@client/components/InputComponent.vue";
 import AuthenticationService from "@client/services/AuthenticationService";
+import {ValidationError} from "@client/types/validationError";
 
 const state = reactive<{
   form: LoginForm;
-  validationError: any;
+  validationError?: ValidationError;
 }>({
   form: {
     username: '',
     password: ''
   },
-  validationError: null
+  validationError: undefined
 })
 
 const emits = defineEmits(['signup'])
@@ -39,10 +40,18 @@ const login = async () => {
         @submit.prevent="login"
     >
       <WrapperInput title="Username">
-        <InputComponent v-model="state.form.username" />
+        <InputComponent
+            v-model="state.form.username"
+            name="username"
+            :validation-error="state.validationError"
+        />
       </WrapperInput>
       <WrapperInput title="Password">
-        <InputComponent v-model="state.form.password" />
+        <InputComponent
+            v-model="state.form.password"
+            name="password"
+            :validation-error="state.validationError"
+        />
       </WrapperInput>
       <div class="w-full flex justify-end items-center space-x-4">
         <button
@@ -54,7 +63,7 @@ const login = async () => {
         </button>
         <span>OR</span>
         <button type="submit" class="button button-primary">
-          login
+          Login
         </button>
       </div>
     </form>
