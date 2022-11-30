@@ -43,7 +43,7 @@ const state = reactive<{
   </div>
   <div class="hidden md:flex flex-col p-8 max-w-7xl mx-auto">
     <div class="flex flex-col w-full space-y-8 lg:space-x-8 lg:space-y-0 lg:flex-row">
-      <aside class="space-x-6 lg:space-x-0 lg:space-y-6 flex flex-row lg:flex-col justify-between">
+      <aside class="space-x-6 lg:space-x-0 lg:space-y-6 flex flex-row lg:flex-col justify-between lg:justify-start">
         <div class="w-[225px] h-[225px] rounded-lg bg-white lg:w-[250px] p-5 gradient">
           <h1 class="text-center text-2xl text-white font-bold">
             product feedback
