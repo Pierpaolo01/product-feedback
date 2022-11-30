@@ -25,5 +25,5 @@ suggestionRoutes.delete('/suggestion/:suggestionId', isAuth, deleteSuggestion)
 
 suggestionRoutes.post('/suggestion/:suggestionId/like', isAuth, likeSuggestion)
 
-suggestionRoutes.post('/suggestion/:suggestionId/unlike', isAuth, unlikeSuggestion)
+suggestionRoutes.delete('/suggestion/:suggestionId/unlike', isAuth, unlikeSuggestion)
 

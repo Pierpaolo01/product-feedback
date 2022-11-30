@@ -11,7 +11,7 @@ const state = reactive<{
 </script>
 
 <template>
-  <div class="pt-[33%]">
+  <div class="min-h-full flex justify-center items-center">
     <div class="flex-1 max-w-xl mx-auto bg-white p-6 rounded-lg space-y-6">
       <LoginForm
           v-if="state.form === 'login'"

@@ -8,14 +8,14 @@ import TextAreaComponent from "@client/components/TextAreaComponent.vue";
 import SelectComponent from "@client/components/SelectComponent.vue";
 import plusIcon from "@client/assets/icons/plus-icon.svg";
 import {SuggestionCategories} from "@constants/suggestionCategories"
-import type {FeedbackForm} from "@client/types/feedbackTypes";
+import type {SuggestionFormType} from "@client/types/suggestionTypes";
 import type {ValidationError} from "@client/types/validationError";
 import FeedbackService from "@client/services/feedbackService";
 
 const router = useRouter();
 
 const state = reactive<{
-  form: FeedbackForm;
+  form: SuggestionFormType;
   validationError?: ValidationError;
 }>({
   form: {
