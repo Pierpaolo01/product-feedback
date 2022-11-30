@@ -9,7 +9,7 @@ const emits = defineEmits(['onSelect'])
 </script>
 
 <template>
-  <div class="w-[225px] rounded-lg bg-white lg:w-[250px] p-5 flex flex-wrap">
+  <div class="w-[225px] rounded-lg bg-white lg:w-[250px] p-5 flex flex-wrap shadow-md">
     <div
         v-for="category in SuggestionCategories"
         :key="category"

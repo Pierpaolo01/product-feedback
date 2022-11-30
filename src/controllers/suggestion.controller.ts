@@ -10,7 +10,7 @@ export enum SuggestionValidators {
     update
 }
 
-export const SuggestionValidate = (method: SuggestionValidators) => {
+export const SuggestionValidation = (method: SuggestionValidators) => {
     switch (method) {
         case SuggestionValidators.create: {
             return [
@@ -48,10 +48,10 @@ export const indexSuggestions = async (req: Request, res: Response) => {
             include: {
                 _count: {
                     select: {
-                        SuggestionLike: true
+                        suggestionLike: true
                     }
                 },
-                SuggestionLike: {
+                suggestionLike: {
                     where: {
                         user_id: Number(req.userId)
                     }
@@ -67,8 +67,8 @@ export const indexSuggestions = async (req: Request, res: Response) => {
                 category: item.category,
                 status: item.status,
                 user_id: item.user_id,
-                is_liked: !!item.SuggestionLike.length,
-                likes: item._count.SuggestionLike,
+                is_liked: !!item.suggestionLike.length,
+                likes: item._count.suggestionLike,
                 created_at: item.created_at,
                 update_at: item.updated_at,
             }
@@ -82,7 +82,6 @@ export const indexSuggestions = async (req: Request, res: Response) => {
 
 export const createSuggestion = async (req: Request, res: Response) => {
     try {
-        console.log(req.body)
         const newSuggestion = await prisma.suggestion.create({
             data: {
                 title: req.body.title,
@@ -113,7 +112,6 @@ export const createSuggestion = async (req: Request, res: Response) => {
 
 export const updateSuggestion = async (req: Request, res: Response) => {
     try {
-        console.log(req.body)
         const updatedSuggestion = await prisma.suggestion.update({
             data: {
                 title: req.body.title,
@@ -142,10 +140,10 @@ export const showSuggestion = async (req: Request, res: Response) => {
             include: {
                 _count: {
                     select: {
-                        SuggestionLike: true
+                        suggestionLike: true
                     }
                 },
-                SuggestionLike: {
+                suggestionLike: {
                     where: {
                         user_id: Number(req.userId)
                     }
@@ -162,8 +160,8 @@ export const showSuggestion = async (req: Request, res: Response) => {
                 category: suggestionData.category,
                 status: suggestionData.status,
                 user_id: suggestionData.user_id,
-                is_liked: !!suggestionData.SuggestionLike.length,
-                likes: suggestionData._count.SuggestionLike,
+                is_liked: !!suggestionData.suggestionLike.length,
+                likes: suggestionData._count.suggestionLike,
                 created_at: suggestionData.created_at,
                 update_at: suggestionData.updated_at,
             }})

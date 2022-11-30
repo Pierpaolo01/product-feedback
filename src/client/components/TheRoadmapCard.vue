@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="w-[225px] rounded-lg bg-white lg:w-[250px] p-5 space-y-6">
+  <div class="w-[225px] rounded-lg bg-white lg:w-[250px] p-5 space-y-6 shadow-md">
     <div class="flex justify-between">
       <h3 class="font-bold text-lg">
         Roadmap

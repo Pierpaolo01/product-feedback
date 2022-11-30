@@ -31,7 +31,7 @@ const navigate = () => {
 </script>
 
 <template>
-  <div class="rounded-xl">
+  <div class="rounded-xl shadow-md">
     <div class="grid grid-cols-2 md:grid-cols-6 p-4 bg-white rounded-lg">
       <div
           class="col-span-2 md:col-span-4 flex flex-col items-start"

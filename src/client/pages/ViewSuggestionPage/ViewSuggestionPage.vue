@@ -5,14 +5,23 @@ import SuggestionCard from "@client/components/SuggestionCard.vue";
 import SuggestionService from "@client/services/suggestionService";
 import type {SuggestionType} from "@client/types/suggestionTypes";
 import chevronBack from "@client/assets/icons/chevron-back.svg"
+import TextAreaComponent from "@client/components/TextAreaComponent.vue";
+import {ValidationError} from "@client/types/validationError";
+import CommentService from "@client/services/CommentService";
 
 const route = useRoute()
 const router = useRouter()
 
 const state = reactive<{
   suggestion?: SuggestionType;
+  newComment: string;
+  comments: any[];
+  validationError?: ValidationError;
 }>({
-  suggestion: undefined
+  suggestion: undefined,
+  newComment: '',
+  comments: [],
+  validationError: undefined,
 })
 
 const getSuggestion = async () => {
@@ -22,11 +31,19 @@ const getSuggestion = async () => {
   } catch (e) {
     await router.push({name: 'dashboard'})
   }
+}
 
+const submitComment = async () => {
+  await CommentService.createComment(String(route.params.suggestion_id), state.newComment)
+}
+
+const indexComment = async () => {
+  await CommentService.indexSuggestionComments(String(route.params.suggestion_id))
 }
 
 onMounted(() => {
-  getSuggestion()
+  getSuggestion();
+  indexComment();
 })
 </script>
 
@@ -42,7 +59,7 @@ onMounted(() => {
       </button>
       <router-link
           :to="{name: 'edit-suggestion', params: {suggestion_id: state.suggestion.id}}"
-          class="button button-primary"
+          class="button button-primary shadow-md"
       >
         Edit Feedback
       </router-link>
@@ -52,5 +69,28 @@ onMounted(() => {
         :can-navigate="false"
         @refresh="getSuggestion"
     />
+    <div class="space-y-6 mt-8">
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-xl text-dark-purple font-bold mb-6">420 Comments</h1>
+        <div>
+          comments
+        </div>
+      </div>
+      <div class="space-y-4 bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-xl mb-6 text-dark-purple font-bold">Add Comment</h1>
+        <TextAreaComponent v-model="state.newComment" name="text" :validation-error="state.validationError"/>
+        <div class="flex justify-between">
+          <span class="text-grayish">
+            {{ 250 - state.newComment.length }} Characters left
+          </span>
+          <button
+              class="button button-secondary"
+              @click="submitComment"
+          >
+            Post Comment
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

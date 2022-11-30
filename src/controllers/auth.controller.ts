@@ -34,12 +34,8 @@ export const validate = (method: Validators) => {
                             }
                     }).withMessage("Username already taken"),
                 body('password')
-                    .custom((value) => {
-                        if (value.split('').length <= 5) {
-                            return Promise.reject()
-                        }
-                        return Promise.resolve()
-                    }).withMessage('Password must be longer then 5 characters')
+                    .isLength({min: 5})
+                    .withMessage('Password must be longer then 5 characters')
             ]
         }
         case Validators.login: {

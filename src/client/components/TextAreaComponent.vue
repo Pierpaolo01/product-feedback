@@ -5,7 +5,7 @@ import {ValidationError} from "@client/types/validationError";
 const props = withDefaults(defineProps<{
   modelValue: string;
   rows?: number;
-  name: string;
+  name?: string;
   validationError?: ValidationError;
 }>(), {
   rows: 3
