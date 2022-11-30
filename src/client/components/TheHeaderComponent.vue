@@ -6,6 +6,10 @@ import checkMark from "@client/assets/icons/check-mark.svg"
 import chevronUp from "@client/assets/icons/chevron-up.svg"
 import chevronDown from "@client/assets/icons/chevron-down.svg"
 
+defineProps<{
+  suggestionCount: number;
+}>()
+
 const state = reactive<{
   sortBy: SortBy
   toggleSortOptions: boolean;
@@ -21,7 +25,7 @@ const state = reactive<{
       <div class="hidden md:flex items-center">
         <img :src="bulb" alt="idea_bulb" class="mr-4">
         <span>
-          69 Suggestions
+          {{ suggestionCount ?? 0 }} Suggestions
         </span>
       </div>
       <div class="relative">

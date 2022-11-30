@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import {reactive} from "vue";
 import {useRouter} from "vue-router";
-import {SuggestionCategories} from "@constants/suggestionCategories"
-import type {FeedbackForm} from "@client/types/feedbackTypes";
-import FeedbackService from "@client/services/feedbackService";
 import chevronBack from "@client/assets/icons/chevron-back.svg";
 import WrapperInput from "@client/components/WrapperInput.vue";
 import InputComponent from "@client/components/InputComponent.vue";
 import TextAreaComponent from "@client/components/TextAreaComponent.vue";
 import SelectComponent from "@client/components/SelectComponent.vue";
 import plusIcon from "@client/assets/icons/plus-icon.svg";
+import {SuggestionCategories} from "@constants/suggestionCategories"
+import type {FeedbackForm} from "@client/types/feedbackTypes";
+import type {ValidationError} from "@client/types/validationError";
+import FeedbackService from "@client/services/feedbackService";
 
 const router = useRouter();
 
 const state = reactive<{
   form: FeedbackForm;
-  validationError?: any;
+  validationError?: ValidationError;
 }>({
   form: {
-    title: 'Title',
+    title: '',
     category: SuggestionCategories.ENHANCEMENT,
     description: ''
   },
@@ -59,10 +60,18 @@ const createSuggestion = async () => {
       <h1 class="font-bold text-2xl text-dark-purple-gray mt-3">Create New Feedback</h1>
       <div class="mt-10 space-y-6">
         <WrapperInput title="Feedback Title" subtitle="Add a short, descriptive headline">
-          <InputComponent v-model="state.form.title"/>
+          <InputComponent
+              v-model="state.form.title"
+              name="title"
+              :validation-error="state.validationError"
+          />
         </WrapperInput>
         <WrapperInput title="Category" subtitle="Choose a category for your feedback">
-          <SelectComponent :value="state.form.category">
+          <SelectComponent
+              :value="state.form.category"
+              name="category"
+              :validation-error="state.validationError"
+          >
             <option
                 v-for="category in SuggestionCategories"
                 :key="category"
@@ -74,7 +83,11 @@ const createSuggestion = async () => {
           </SelectComponent>
         </WrapperInput>
         <WrapperInput title="Feedback Detail" subtitle="Include any specific comments on what should be improved, added, etc.">
-          <TextAreaComponent v-model="state.form.description"/>
+          <TextAreaComponent
+              v-model="state.form.description"
+              name="description"
+              :validation-error="state.validationError"
+          />
         </WrapperInput>
       </div>
       <div class="w-full flex flex-col space-y-4 md:space-y-0 md:flex-row justify-end space-x-4 mt-8">

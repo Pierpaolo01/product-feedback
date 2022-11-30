@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import {reactive} from "vue";
-import type {SignupForm} from "@client/types/authenticationTypes";
+import {useRouter} from "vue-router";
 import WrapperInput from "@client/components/WrapperInput.vue";
 import InputComponent from "@client/components/InputComponent.vue";
-import AuthenticationService from "@client/services/AuthenticationService";
-import {ValidationError} from "@client/types/validationError";
+import AuthenticationService from "@client/services/authenticationService";
+import type {SignupForm} from "@client/types/authenticationTypes";
+import type {ValidationError} from "@client/types/validationError";
+
+const router = useRouter()
 
 const state = reactive<{
   form: SignupForm;
@@ -24,6 +27,8 @@ const emits = defineEmits(['login'])
 const signup = async () => {
   try {
     const response = await AuthenticationService.signup(state.form)
+    localStorage.setItem('product-feedback-token', response.data.data)
+    await router.push({name: 'dashboard'})
   } catch (e: any) {
     if (e.response.status === 422) {
       state.validationError = e.response.data.data;
@@ -66,6 +71,7 @@ const signup = async () => {
           <InputComponent
               v-model="state.form.password"
               name="password"
+              type="password"
               :validation-error="state.validationError"
           />
         </WrapperInput>

@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import {ValidationError} from "@client/types/validationError";
 import {computed, ref, watch} from "vue";
+import type {ValidationError} from "@client/types/validationError";
 
 let props = withDefaults(defineProps<{
   modelValue: string;
   validationError?: ValidationError;
+  type?: 'text' | 'password'
   name: string;
 }>(), {
-  name: ''
+  name: '',
+  type: "text"
 })
 const emits = defineEmits(['update:modelValue'])
 
@@ -36,7 +38,7 @@ watch(
   <div class="space-y-2">
     <input
         :value="modelValue"
-        type="text"
+        :type="type"
         class="bg-app-bg rounded-md focus:border-purple-2 py-3 px-6 w-full"
         :class="validation ? 'border border-red' : ''"
         @input="emits('update:modelValue', $event.target.value); deleteValidation()"

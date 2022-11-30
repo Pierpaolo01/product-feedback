@@ -60,6 +60,7 @@
   },
   "_moduleAliases": {
     "@src": "src",
+    "@constants": "src/constants",
     "@type": "src/types/",
     "@controllers": "src/controllers",
     "@routes": "src/routes",
