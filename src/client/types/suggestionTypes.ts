@@ -2,7 +2,7 @@ import {SuggestionCategories} from "@constants/suggestionCategories"
 
 export interface SuggestionType {
     id: number;
-    title: number;
+    title: string;
     description: string;
     category: string;
     status: string;
@@ -13,7 +13,13 @@ export interface SuggestionType {
     update_at: string;
 }
 
-export interface SuggestionFormType {
+export interface CreateSuggestionFormType {
+    title: string;
+    category: SuggestionCategories;
+    description: string;
+}
+
+export interface EditSuggestionFormType {
     title: string;
     category: SuggestionCategories;
     description: string;

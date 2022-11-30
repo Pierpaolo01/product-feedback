@@ -8,14 +8,14 @@ import TextAreaComponent from "@client/components/TextAreaComponent.vue";
 import SelectComponent from "@client/components/SelectComponent.vue";
 import plusIcon from "@client/assets/icons/plus-icon.svg";
 import {SuggestionCategories} from "@constants/suggestionCategories"
-import type {SuggestionFormType} from "@client/types/suggestionTypes";
+import type {CreateSuggestionFormType} from "@client/types/suggestionTypes";
 import type {ValidationError} from "@client/types/validationError";
-import FeedbackService from "@client/services/feedbackService";
+import SuggestionService from "@client/services/suggestionService";
 
 const router = useRouter();
 
 const state = reactive<{
-  form: SuggestionFormType;
+  form: CreateSuggestionFormType;
   validationError?: ValidationError;
 }>({
   form: {
@@ -28,7 +28,7 @@ const state = reactive<{
 
 const createSuggestion = async () => {
   try {
-    await FeedbackService.createSuggestion(state.form);
+    await SuggestionService.createSuggestion(state.form);
     await router.push({name: 'dashboard'});
   } catch (e: any) {
       console.log(e)
@@ -44,7 +44,7 @@ const createSuggestion = async () => {
     <div>
       <router-link
           :to="{name: 'dashboard'}"
-          class="button-back font-bold flex items-center space-x-4"
+          class="button-back flex items-center space-x-4"
       >
         <img :src="chevronBack" alt="chevron_back">
         <span>
@@ -68,9 +68,8 @@ const createSuggestion = async () => {
         </WrapperInput>
         <WrapperInput title="Category" subtitle="Choose a category for your feedback">
           <SelectComponent
-              :value="state.form.category"
+              v-model="state.form.category"
               name="category"
-              :validation-error="state.validationError"
           >
             <option
                 v-for="category in SuggestionCategories"

@@ -14,6 +14,16 @@ const routes = createRouter({
             component: () => import('@client/pages/CreateSuggestionPage/CreateSuggestionPage.vue')
         },
         {
+            path: "/suggestion/:suggestion_id",
+            name: 'view-suggestion',
+            component: () => import('@client/pages/ViewSuggestionPage/ViewSuggestionPage.vue')
+        },
+        {
+            path: "/suggestion/:suggestion_id/edit",
+            name: 'edit-suggestion',
+            component: () => import('@client/pages/EditSuggestionPage/EditSuggestionPage.vue')
+        },
+        {
             path: "/authentication",
             name: "authentication",
             component: () => import('@client/pages/AuthenticationPage/AuthenticationPage.vue')

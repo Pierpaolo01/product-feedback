@@ -44,7 +44,6 @@ export const SuggestionValidate = (method: SuggestionValidators) => {
 
 export const indexSuggestions = async (req: Request, res: Response) => {
     try {
-        console.log( Number(req.userId))
         const suggestionsData = await prisma.suggestion.findMany({
             include: {
                 _count: {
@@ -83,6 +82,7 @@ export const indexSuggestions = async (req: Request, res: Response) => {
 
 export const createSuggestion = async (req: Request, res: Response) => {
     try {
+        console.log(req.body)
         const newSuggestion = await prisma.suggestion.create({
             data: {
                 title: req.body.title,
@@ -113,7 +113,7 @@ export const createSuggestion = async (req: Request, res: Response) => {
 
 export const updateSuggestion = async (req: Request, res: Response) => {
     try {
-
+        console.log(req.body)
         const updatedSuggestion = await prisma.suggestion.update({
             data: {
                 title: req.body.title,
@@ -126,15 +126,60 @@ export const updateSuggestion = async (req: Request, res: Response) => {
             }
         })
 
-        res.status(200).json({data: updatedSuggestion})
+        res.status(204).json({data: updatedSuggestion})
     } catch (e) {
         res.status(400).json({data: e})
     }
 
 }
 
+export const showSuggestion = async (req: Request, res: Response) => {
+    try {
+        const suggestionData = await prisma.suggestion.findFirst({
+            where: {
+                id: Number(req.params.suggestionId)
+            },
+            include: {
+                _count: {
+                    select: {
+                        SuggestionLike: true
+                    }
+                },
+                SuggestionLike: {
+                    where: {
+                        user_id: Number(req.userId)
+                    }
+                }
+            }
+        })
+
+        if (suggestionData === null) return res.status(404).json()
+
+        return res.status(200).json({data: {
+                id: suggestionData.id,
+                title: suggestionData.title,
+                description: suggestionData.description,
+                category: suggestionData.category,
+                status: suggestionData.status,
+                user_id: suggestionData.user_id,
+                is_liked: !!suggestionData.SuggestionLike.length,
+                likes: suggestionData._count.SuggestionLike,
+                created_at: suggestionData.created_at,
+                update_at: suggestionData.updated_at,
+            }})
+    } catch (e) {
+
+    }
+}
+
 export const deleteSuggestion = async (req: Request, res: Response) => {
     try {
+        await prisma.suggestionLike.deleteMany({
+            where: {
+                suggestion_id: Number(req.params.suggestionId)
+            }
+        })
+
         await prisma.suggestion.delete({
             where: {
                 id: Number(req.params.suggestionId)

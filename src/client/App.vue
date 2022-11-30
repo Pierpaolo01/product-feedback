@@ -28,7 +28,7 @@
 }
 
 .button-deletion {
-  @apply bg-red hover:bg-red-lighter;
+  @apply bg-red hover:bg-red-lighter text-white;
 }
 
 .button-back {

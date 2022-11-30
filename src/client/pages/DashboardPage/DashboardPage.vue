@@ -5,7 +5,7 @@ import TheRoadmapCard from "@client/components/TheRoadmapCard.vue";
 import TheHeaderComponent from "@client/components/TheHeaderComponent.vue";
 import SuggestionCard from "@client/components/SuggestionCard.vue";
 import {onMounted, reactive} from "vue";
-import FeedbackService from "@client/services/feedbackService";
+import SuggestionService from "@client/services/suggestionService";
 import {SuggestionCategories} from "@constants/suggestionCategories";
 
 const state = reactive<{
@@ -17,7 +17,7 @@ const state = reactive<{
 })
 
 const indexSuggestions = async () => {
-  const response = await FeedbackService.indexSuggestions()
+  const response = await SuggestionService.indexSuggestions()
   state.suggestions = response.data.data;
 }
 

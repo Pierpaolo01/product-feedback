@@ -3,6 +3,7 @@ import {Router} from "express";
 import {
     createSuggestion,
     indexSuggestions,
+    showSuggestion,
     deleteSuggestion,
     SuggestionValidate,
     SuggestionValidators,
@@ -16,6 +17,8 @@ import {isAuth} from "@src/middleware/auth.middleware";
 export const suggestionRoutes = Router();
 
 suggestionRoutes.get('/suggestions', isAuth, indexSuggestions)
+
+suggestionRoutes.get('/suggestion/:suggestionId', isAuth, showSuggestion)
 
 suggestionRoutes.post('/suggestion', isAuth, SuggestionValidate(SuggestionValidators.create), catchValidationError, createSuggestion)
 

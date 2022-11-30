@@ -1,29 +1,43 @@
 <script setup lang="ts">
 import BadgeComponent from "@client/components/BadgeComponent.vue";
 import comment from "@client/assets/icons/comment.svg";
-import FeedbackService from "@client/services/feedbackService";
+import SuggestionService from "@client/services/suggestionService";
 import type {SuggestionType} from "@client/types/suggestionTypes";
+import {useRouter} from "vue-router";
 
-const props = defineProps<{
+const router = useRouter()
+
+const props = withDefaults(defineProps<{
   suggestion: SuggestionType;
-}>()
+  canNavigate?: boolean;
+}>(), {
+  canNavigate: true
+})
 
 const emits = defineEmits(['refresh'])
 
 const likeOrUnlikeSuggestion = async () => {
   if (!props.suggestion.is_liked) {
-    await FeedbackService.createSuggestionLike(props.suggestion.id)
+    await SuggestionService.createSuggestionLike(props.suggestion.id)
   } else {
-    await FeedbackService.deleteSuggestionLike(props.suggestion.id)
+    await SuggestionService.deleteSuggestionLike(props.suggestion.id)
   }
   emits('refresh')
+}
+
+const navigate = () => {
+  if (props.canNavigate) router.push({name: 'view-suggestion', params: {suggestion_id: props.suggestion.id}})
 }
 </script>
 
 <template>
   <div class="rounded-xl">
     <div class="grid grid-cols-2 md:grid-cols-6 p-4 bg-white rounded-lg">
-      <div class="col-span-2 md:col-span-4 flex flex-col items-start">
+      <div
+          class="col-span-2 md:col-span-4 flex flex-col items-start"
+          :class="canNavigate ? 'cursor-pointer' : 'cursor-default'"
+          @click="navigate"
+      >
         <h1 class="font-bold text-lg">{{ suggestion.title }}</h1>
         <p>{{ suggestion.description }}</p>
         <span class="inline-flex cursor-default items-center px-2.5 py-1.5 font-bold text-purple-2 font-semibold rounded-md text-xs font-medium bg-app-bg-darker mt-3">
