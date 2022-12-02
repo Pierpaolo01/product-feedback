@@ -34,7 +34,13 @@ const getSuggestion = async () => {
 }
 
 const submitComment = async () => {
-  await CommentService.createComment(String(route.params.suggestion_id), state.newComment)
+  try {
+    await CommentService.createComment(String(route.params.suggestion_id), state.newComment)
+  } catch (e: any) {
+    if (e.response && e.response.status === 422) {
+      state.validationError = e.response.data.data
+    }
+  }
 }
 
 const indexComment = async () => {

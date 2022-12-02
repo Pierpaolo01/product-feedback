@@ -1,6 +1,7 @@
 import {prisma} from "@src/prisma";
 import {Request, Response} from "express";
 import {body} from "express-validator";
+import CommentDTO from "@src/dto/commentDTO";
 
 export enum CommentValidators {
     CREATE,
@@ -12,7 +13,7 @@ export const CommentValidation = (method: CommentValidators) => {
         case CommentValidators.CREATE: {
             return [
                 body('text')
-                    .isLength({ min: 5, max:5 })
+                    .notEmpty().withMessage("Comment cannot be empty")
             ]
         }
         case CommentValidators.REPLY: {
@@ -21,7 +22,6 @@ export const CommentValidation = (method: CommentValidators) => {
     }
 }
 
-
 export const createSuggestionComment = async (req: Request, res: Response) => {
     try {
         const comment = await prisma.suggestionComment.create({
@@ -29,23 +29,34 @@ export const createSuggestionComment = async (req: Request, res: Response) => {
                 text: req.body.text,
                 user_id: req.userId!,
                 suggestion_id: Number(req.params.suggestionId)
+            },
+            include: {
+                user: true
             }
         })
 
-        console.log(comment)
-
-        res.status(201).json({data: comment})
+        res.status(201).json({data: new CommentDTO(comment)})
     } catch (e) {
         res.status(400).json({data: e})
     }
 }
 
 export const indexSuggestionComments = async (req: Request, res: Response) => {
-    const comments = await prisma.suggestionComment.findMany({
-        where: {
-            suggestion_id: Number(req.params.suggestion_id)
-        }
-    })
+    try {
+        const comments = await prisma.suggestionComment.findMany({
+            where: {
+                suggestion_id: Number(req.params.suggestionId)
+            },
+            include: {
+                user: true
+            }
+        })
 
-    res.status(200).json({data: comments})
+        res.status(200).json({data:
+                comments.map(comment => new CommentDTO(comment))
+        })
+    } catch (e) {
+        console.log(e)
+        res.status(400).json({data: e})
+    }
 }
