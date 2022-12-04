@@ -65,8 +65,6 @@ export const validate = (method: Validators) => {
     }
 }
 
-
-
 export const signUp = async (req: Request, res: Response) => {
     const { first_name, last_name, username, password }: { [key:string]: string } = req.body
 
@@ -87,7 +85,7 @@ export const signUp = async (req: Request, res: Response) => {
             role: newUser.role
         }
 
-        const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '15m'})
+        const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '1H'})
         res.status(201).json({data: jwtToken})
         return
     }
@@ -99,6 +97,6 @@ export const login = async (req: Request, res: Response) => {
         role: req.user!.role
     }
 
-    const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '15m'})
+    const jwtToken = jwt.sign(jwtPayload, 'super-secret', {expiresIn: '1H'})
     return res.status(200).json({data: jwtToken})
 }

@@ -17,7 +17,10 @@ export const CommentValidation = (method: CommentValidators) => {
             ]
         }
         case CommentValidators.REPLY: {
-            return []
+            return [
+                body('reply')
+                    .notEmpty().withMessage('Reply cannot be empty')
+            ]
         }
     }
 }
@@ -31,10 +34,9 @@ export const createSuggestionComment = async (req: Request, res: Response) => {
                 suggestion_id: Number(req.params.suggestionId)
             },
             include: {
-                user: true
+                user: true,
             }
         })
-
         res.status(201).json({data: new CommentDTO(comment)})
     } catch (e) {
         res.status(400).json({data: e})
@@ -48,15 +50,35 @@ export const indexSuggestionComments = async (req: Request, res: Response) => {
                 suggestion_id: Number(req.params.suggestionId)
             },
             include: {
-                user: true
+                user: true,
+                commentReply: {
+                    include: {
+                        user: true
+                    }
+                }
             }
         })
-
         res.status(200).json({data:
                 comments.map(comment => new CommentDTO(comment))
         })
     } catch (e) {
         console.log(e)
         res.status(400).json({data: e})
+    }
+}
+
+export const createCommentReply = async (req: Request, res: Response) => {
+    try {
+        const newReply = await prisma.commentReply.create({
+            data: {
+                reply: req.body.reply,
+                comment_id: Number(req.params.commentId),
+                user_id: Number(req.userId)
+            }
+        })
+
+        res.status(201).json({data: newReply})
+    } catch (e) {
+        res.status(500).json({ data: e })
     }
 }

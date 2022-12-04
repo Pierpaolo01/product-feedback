@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import {onMounted, reactive} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import SuggestionCard from "@client/components/SuggestionCard.vue";
+import CommentService from "@client/services/CommentService";
 import SuggestionService from "@client/services/suggestionService";
+import type {ValidationError} from "@client/types/validationError";
 import type {SuggestionType} from "@client/types/suggestionTypes";
+import type {CommentType} from "@client/types/commentTypes";
+import SuggestionCard from "@client/components/SuggestionCard.vue";
 import chevronBack from "@client/assets/icons/chevron-back.svg"
 import TextAreaComponent from "@client/components/TextAreaComponent.vue";
-import {ValidationError} from "@client/types/validationError";
-import CommentService from "@client/services/CommentService";
+import CommentComponent from "@client/pages/ViewSuggestionPage/components/CommentComponent.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -15,7 +17,7 @@ const router = useRouter()
 const state = reactive<{
   suggestion?: SuggestionType;
   newComment: string;
-  comments: any[];
+  comments: CommentType[];
   validationError?: ValidationError;
 }>({
   suggestion: undefined,
@@ -36,6 +38,7 @@ const getSuggestion = async () => {
 const submitComment = async () => {
   try {
     await CommentService.createComment(String(route.params.suggestion_id), state.newComment)
+    await indexComments()
   } catch (e: any) {
     if (e.response && e.response.status === 422) {
       state.validationError = e.response.data.data
@@ -43,13 +46,14 @@ const submitComment = async () => {
   }
 }
 
-const indexComment = async () => {
-  await CommentService.indexSuggestionComments(String(route.params.suggestion_id))
+const indexComments = async () => {
+  const response = await CommentService.indexSuggestionComments(String(route.params.suggestion_id))
+  state.comments = response.data.data;
 }
 
 onMounted(() => {
   getSuggestion();
-  indexComment();
+  indexComments();
 })
 </script>
 
@@ -77,25 +81,30 @@ onMounted(() => {
     />
     <div class="space-y-6 mt-8">
       <div class="bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-xl text-dark-purple font-bold mb-6">420 Comments</h1>
+        <h1 class="text-xl text-dark-purple font-bold mb-6">{{ state.comments.length }} Comments</h1>
         <div>
-          comments
+          <CommentComponent
+              v-for="comment in state.comments"
+              :key="comment.id"
+              :comment="comment"
+              @refreshComments="indexComments"
+          />
         </div>
       </div>
       <div class="space-y-4 bg-white p-8 rounded-lg shadow-md">
         <h1 class="text-xl mb-6 text-dark-purple font-bold">Add Comment</h1>
         <TextAreaComponent v-model="state.newComment" name="text" :validation-error="state.validationError"/>
-        <div class="flex justify-between">
+        <form
+            class="flex justify-between"
+            @submit.prevent="submitComment"
+        >
           <span class="text-grayish">
             {{ 250 - state.newComment.length }} Characters left
           </span>
-          <button
-              class="button button-secondary"
-              @click="submitComment"
-          >
+          <button class="button button-secondary">
             Post Comment
           </button>
-        </div>
+        </form>
       </div>
     </div>
   </div>

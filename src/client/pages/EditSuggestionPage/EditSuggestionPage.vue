@@ -43,7 +43,7 @@ const updateSuggestion = async () => {
     await router.back()
   } catch (e) {
     if (e.response && e.response.status === 422) {
-      state.validationError = e.response.data
+      state.validationError = e.response.data.data
     }
   }
 }
