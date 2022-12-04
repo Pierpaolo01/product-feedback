@@ -2,7 +2,7 @@
 import {reactive} from "vue";
 import AvatarComponent from "@client/components/AvatarComponent.vue";
 import TextAreaComponent from "@client/components/TextAreaComponent.vue";
-import type {CommentType, ReplyFormType} from "@client/types/commentTypes";
+import type {CommentType} from "@client/types/commentTypes";
 import type {ValidationError} from "@client/types/validationError";
 import CommentService from "@client/services/CommentService";
 
@@ -11,15 +11,14 @@ const props = defineProps<{
 }>()
 
 const state = reactive<{
-  form: ReplyFormType;
+  replyText: string;
+  reply: string;
   replied_username?: string;
   toggleReplyForm: boolean;
   validationError?: ValidationError;
 }>({
-  form: {
-    reply: '',
-    comment_id: undefined,
-  },
+  replyText: '',
+  reply: '',
   replied_username: undefined,
   toggleReplyForm: false,
   validationError: undefined
@@ -29,12 +28,14 @@ const emits = defineEmits(['refreshComments'])
 
 const submitReply = async () => {
   try {
-    state.toggleReplyForm = false
-    state.form.reply = `${state.replied_username} ${state.form.reply}`
+    state.reply = state.replyText.length > 0
+        ? (`${state.replied_username} ${state.replyText}`).trim()
+        : ''
 
-    await CommentService.submitReply(props.comment.id, state.form)
+    await CommentService.submitReply(props.comment.id, {reply: state.reply})
 
     emits('refreshComments')
+    state.toggleReplyForm = false
   } catch (e: any) {
     if (e.response && e.response.status === 422) {
       state.validationError = e.response.data.data;
@@ -95,7 +96,7 @@ const submitReply = async () => {
         <span class="text-sm text-grayish">
           replying to {{ state.replied_username }}
         </span>
-        <TextAreaComponent v-model="state.form.reply" :validation-error="state.validationError"/>
+        <TextAreaComponent v-model="state.replyText" name="reply" :validation-error="state.validationError"/>
       </div>
         <button
             type="submit"

@@ -14,8 +14,3 @@ export interface ReplyType {
     user: User
     comment_id: number
 }
-
-export interface ReplyFormType {
-    reply: string;
-    comment_id?: number;
-}
