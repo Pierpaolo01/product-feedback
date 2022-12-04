@@ -49,17 +49,17 @@ export const indexSuggestions = async (req: Request, res: Response) => {
             include: {
                 _count: {
                     select: {
-                        suggestionLike: true
+                        suggestionLike: true,
+                        suggestionComment: true
                     }
                 },
                 suggestionLike: {
                     where: {
-                        user_id: Number(req.userId)
+                        user_id: Number(req.userId),
                     }
                 }
             }
         })
-
         res.status(200).json({
             data: suggestionsData.map((item) => new SuggestionDTO(item))
         })
@@ -117,7 +117,8 @@ export const showSuggestion = async (req: Request, res: Response) => {
             include: {
                 _count: {
                     select: {
-                        suggestionLike: true
+                        suggestionLike: true,
+                        suggestionComment: true
                     }
                 },
                 suggestionLike: {

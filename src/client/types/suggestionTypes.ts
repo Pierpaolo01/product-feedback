@@ -9,6 +9,7 @@ export interface SuggestionType {
     user_id: number;
     is_liked: boolean;
     likes: number;
+    comments: number;
     created_at: string;
     update_at: string;
 }
