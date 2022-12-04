@@ -1,5 +1,22 @@
 <script setup lang="ts">
+import {onMounted, reactive} from "vue";
+import RoadmapService from "@client/services/roadmapService";
+import type {StatusCount} from "@client/types/roadmapTypes";
 
+const state = reactive<{
+  roadmapCount: StatusCount[]
+}>({
+  roadmapCount: []
+})
+
+const countStatuses = async () => {
+  const response = await RoadmapService.countStatuses()
+  state.roadmapCount = response.data.data
+}
+
+onMounted(() => {
+  countStatuses()
+})
 </script>
 
 <template>
@@ -13,43 +30,18 @@
       </router-link>
     </div>
     <ul class="space-y-2">
-      <li class="flex justify-between">
+      <li
+          v-for="status in state.roadmapCount"
+          class="flex justify-between"
+      >
         <div class="flex items-center">
           <div class="h-2 w-2 bg-[#F49F85] mr-4 text-grayish rounded-full"/>
-          Planned
+          {{ status.status }}
         </div>
         <span class="font-bold text-grayish">
-          2
-        </span>
-      </li>
-      <li class="flex justify-between">
-        <div class="flex items-center">
-          <div class="h-2 w-2 bg-[#AD1FEA] mr-4 text-grayish rounded-full"/>
-          In-progress
-        </div>
-        <span class="font-bold text-grayish">
-          2
-        </span>
-      </li>
-      <li class="flex justify-between">
-        <div class="flex items-center">
-          <div class="h-2 w-2 bg-[#62BCFA] mr-4 text-grayish rounded-full"/>
-          In-progress
-        </div>
-        <span class="font-bold text-grayish">
-          2
+          {{ status.count }}
         </span>
       </li>
     </ul>
   </div>
 </template>
-
-<script>
-export default {
-  name: "TheRoadmapCard"
-}
-</script>
-
-<style scoped>
-
-</style>
