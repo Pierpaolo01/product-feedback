@@ -31,7 +31,7 @@ const navigate = () => {
 </script>
 
 <template>
-  <div class="rounded-xl">
+  <div class="rounded-xl shadow-md">
     <div class="grid grid-cols-2 md:grid-cols-6 p-4 bg-white rounded-lg">
       <div
           class="col-span-2 md:col-span-4 flex flex-col items-start"
@@ -61,7 +61,7 @@ const navigate = () => {
       <div class="col-span-1 mt-4 flex justify-self-end md:mt-0">
         <span class="inline-flex items-center px-2.5 py-1.5 space-x-2">
           <img :src="comment" alt="comment_icon">
-          <span class="text-gray-700 font-bold text-sm text-dark-purple-gray">69</span>
+          <span class="text-gray-700 font-bold text-sm text-dark-purple-gray">{{ suggestion.comments }}</span>
         </span>
       </div>
     </div>

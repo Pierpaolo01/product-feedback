@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <div
-      class="rounded-lg text-sm w-fit p-2 font-bold capitalize cursor-pointer px-4 py-2"
+      class="rounded-lg text-sm w-fit p-2 font-bold capitalize cursor-pointer px-4 py-2 shadow"
       :class="isSelected ? 'bg-purple text-white' : 'bg-app-bg-darker text-purple hover:bg-[#CFD7FF]'"
   >
     {{ text }}

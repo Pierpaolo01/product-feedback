@@ -5,7 +5,7 @@ import {
     indexSuggestions,
     showSuggestion,
     deleteSuggestion,
-    SuggestionValidate,
+    SuggestionValidation,
     SuggestionValidators,
     updateSuggestion,
     likeSuggestion,
@@ -20,9 +20,9 @@ suggestionRoutes.get('/suggestions', isAuth, indexSuggestions)
 
 suggestionRoutes.get('/suggestion/:suggestionId', isAuth, showSuggestion)
 
-suggestionRoutes.post('/suggestion', isAuth, SuggestionValidate(SuggestionValidators.create), catchValidationError, createSuggestion)
+suggestionRoutes.post('/suggestion', isAuth, SuggestionValidation(SuggestionValidators.create), catchValidationError, createSuggestion)
 
-suggestionRoutes.put('/suggestion/:suggestionId', isAuth, SuggestionValidate(SuggestionValidators.update), catchValidationError, updateSuggestion)
+suggestionRoutes.put('/suggestion/:suggestionId', isAuth, SuggestionValidation(SuggestionValidators.update), catchValidationError, updateSuggestion)
 
 suggestionRoutes.delete('/suggestion/:suggestionId', isAuth, deleteSuggestion)
 

@@ -3,6 +3,7 @@ import {prisma} from "@src/prisma";
 import {Request, Response} from "express";
 
 import {SuggestionStatus} from "@constants/suggestionStatus";
+import SuggestionDTO from "@src/dto/suggestionDTO";
 
 
 export enum SuggestionValidators {
@@ -10,7 +11,7 @@ export enum SuggestionValidators {
     update
 }
 
-export const SuggestionValidate = (method: SuggestionValidators) => {
+export const SuggestionValidation = (method: SuggestionValidators) => {
     switch (method) {
         case SuggestionValidators.create: {
             return [
@@ -48,33 +49,20 @@ export const indexSuggestions = async (req: Request, res: Response) => {
             include: {
                 _count: {
                     select: {
-                        SuggestionLike: true
+                        suggestionLike: true,
+                        suggestionComment: true
                     }
                 },
-                SuggestionLike: {
+                suggestionLike: {
                     where: {
-                        user_id: Number(req.userId)
+                        user_id: Number(req.userId),
                     }
                 }
             }
         })
-
-        const data = suggestionsData.map((item) => {
-            return {
-                id: item.id,
-                title: item.title,
-                description: item.description,
-                category: item.category,
-                status: item.status,
-                user_id: item.user_id,
-                is_liked: !!item.SuggestionLike.length,
-                likes: item._count.SuggestionLike,
-                created_at: item.created_at,
-                update_at: item.updated_at,
-            }
+        res.status(200).json({
+            data: suggestionsData.map((item) => new SuggestionDTO(item))
         })
-
-        res.status(200).json({data})
     } catch (e) {
         res.status(400).json({data: e})
     }
@@ -82,7 +70,6 @@ export const indexSuggestions = async (req: Request, res: Response) => {
 
 export const createSuggestion = async (req: Request, res: Response) => {
     try {
-        console.log(req.body)
         const newSuggestion = await prisma.suggestion.create({
             data: {
                 title: req.body.title,
@@ -93,18 +80,7 @@ export const createSuggestion = async (req: Request, res: Response) => {
             }
         })
 
-        res.status(201).json({data: {
-                id: newSuggestion.id,
-                title: newSuggestion.title,
-                description: newSuggestion.description,
-                category: newSuggestion.category,
-                status: newSuggestion.status,
-                user_id: newSuggestion.user_id,
-                is_liked: false,
-                likes: 0,
-                created_at: newSuggestion.created_at,
-                update_at: newSuggestion.updated_at,
-            }})
+        res.status(201).json({data: new SuggestionDTO(newSuggestion)})
     } catch (e) {
         console.log(e)
         res.status(400).json({data: e})
@@ -113,7 +89,6 @@ export const createSuggestion = async (req: Request, res: Response) => {
 
 export const updateSuggestion = async (req: Request, res: Response) => {
     try {
-        console.log(req.body)
         const updatedSuggestion = await prisma.suggestion.update({
             data: {
                 title: req.body.title,
@@ -126,7 +101,7 @@ export const updateSuggestion = async (req: Request, res: Response) => {
             }
         })
 
-        res.status(204).json({data: updatedSuggestion})
+        res.status(204).json({data: new SuggestionDTO(updatedSuggestion)})
     } catch (e) {
         res.status(400).json({data: e})
     }
@@ -142,10 +117,11 @@ export const showSuggestion = async (req: Request, res: Response) => {
             include: {
                 _count: {
                     select: {
-                        SuggestionLike: true
+                        suggestionLike: true,
+                        suggestionComment: true
                     }
                 },
-                SuggestionLike: {
+                suggestionLike: {
                     where: {
                         user_id: Number(req.userId)
                     }
@@ -155,18 +131,7 @@ export const showSuggestion = async (req: Request, res: Response) => {
 
         if (suggestionData === null) return res.status(404).json()
 
-        return res.status(200).json({data: {
-                id: suggestionData.id,
-                title: suggestionData.title,
-                description: suggestionData.description,
-                category: suggestionData.category,
-                status: suggestionData.status,
-                user_id: suggestionData.user_id,
-                is_liked: !!suggestionData.SuggestionLike.length,
-                likes: suggestionData._count.SuggestionLike,
-                created_at: suggestionData.created_at,
-                update_at: suggestionData.updated_at,
-            }})
+        return res.status(200).json({data: new SuggestionDTO(suggestionData)})
     } catch (e) {
 
     }

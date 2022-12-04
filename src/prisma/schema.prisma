@@ -16,29 +16,32 @@ enum Role {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  first_name     String
-  last_name      String
-  username       String
-  password       String
-  role           Role
-  suggestions    Suggestion[]
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  SuggestionLike SuggestionLike[]
+  id                Int                 @id @default(autoincrement())
+  first_name         String
+  last_name         String
+  username          String
+  password          String
+  role              Role
+  suggestions       Suggestion[]
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  suggestionLike    SuggestionLike[]
+  suggestionComment SuggestionComment[]
+  commentReply      CommentReply[]
 }
 
 model Suggestion {
-  id             Int              @id @default(autoincrement())
-  title          String
-  description    String
-  category       String
-  status         String
-  user           User             @relation(fields: [user_id], references: [id])
-  user_id        Int
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  SuggestionLike SuggestionLike[]
+  id                Int                 @id @default(autoincrement())
+  title             String
+  description       String
+  category          String
+  status            String
+  user              User                @relation(fields: [user_id], references: [id])
+  user_id           Int
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  suggestionLike    SuggestionLike[]
+  suggestionComment SuggestionComment[]
 }
 
 model SuggestionLike {
@@ -47,4 +50,23 @@ model SuggestionLike {
   user_id       Int
   suggestion    Suggestion @relation(fields: [suggestion_id], references: [id])
   suggestion_id Int
+}
+
+model SuggestionComment {
+  id            Int            @id @default(autoincrement())
+  text          String
+  user          User           @relation(fields: [user_id], references: [id])
+  user_id       Int
+  suggestion    Suggestion     @relation(fields: [suggestion_id], references: [id])
+  suggestion_id Int
+  commentReply  CommentReply[]
+}
+
+model CommentReply {
+  id         Int               @id @default(autoincrement())
+  reply      String
+  user       User              @relation(fields: [user_id], references: [id])
+  user_id    Int
+  comment    SuggestionComment @relation(fields: [comment_id], references: [id])
+  comment_id Int
 }
