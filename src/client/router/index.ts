@@ -24,6 +24,11 @@ const routes = createRouter({
             component: () => import('@client/pages/EditSuggestionPage/EditSuggestionPage.vue')
         },
         {
+          path: "/roadmap",
+          name: 'roadmap',
+          component: () => import('@client/pages/RoadmapPage/RoadmapPage.vue')
+        },
+        {
             path: "/authentication",
             name: "authentication",
             component: () => import('@client/pages/AuthenticationPage/AuthenticationPage.vue')

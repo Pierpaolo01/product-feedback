@@ -25,7 +25,10 @@ onMounted(() => {
       <h3 class="font-bold text-lg">
         Roadmap
       </h3>
-      <router-link to="todo" class="underline text-sm text-purple-2">
+      <router-link
+          :to="{name: 'roadmap'}"
+          class="underline text-sm text-purple-2"
+      >
         view
       </router-link>
     </div>
